@@ -19,6 +19,12 @@ function navigateToStudy() {
   window.scrollTo(0, 0);
 }
 
+function navigateToTopics() {
+  currentState = { view: 'study' };
+  render();
+  window.scrollTo(0, 0);
+}
+
 function navigateToStudyTopic(topicName) {
   currentState = { view: 'study-topic', topic: topicName };
   render();
@@ -117,12 +123,15 @@ function renderYear(year) {
     <p class="page-meta">${data.papers.length} exam paper${data.papers.length > 1 ? 's' : ''}</p>
     ${data.papers.map((p, i) => `
       <div class="paper-card" onclick="navigateTo('paper','${year}',${i})">
-        <div class="paper-title">${p.title}</div>
-        <div class="paper-details">
-          ${p.duration ? `<span>&#9200; ${p.duration}</span>` : ''}
-          ${p.credits ? `<span>&#9881; ${p.credits} credits</span>` : ''}
-          <span>          ${(p.sections || []).reduce((s, sec) => s + sec.marks, 0)} total marks</span>
+        <div class="paper-info">
+          <div class="paper-title">${p.title}</div>
+          <div class="paper-details">
+            ${p.duration ? `<span>&#9200; ${p.duration}</span>` : ''}
+            ${p.credits ? `<span>&#9881; ${p.credits} credits</span>` : ''}
+            <span>          ${(p.sections || []).reduce((s, sec) => s + sec.marks, 0)} total marks</span>
+          </div>
         </div>
+        <button class="pdf-icon-btn" onclick="event.stopPropagation();navigateToPaperPdf('${year}',${i})" title="View full paper as PDF">&#128196;</button>
       </div>
     `).join('')}
   `;
@@ -806,7 +815,7 @@ function renderNav() {
   nav.innerHTML = `
     <a href="#" class="nav-tab ${view === 'home' || view === 'year' || view === 'paper' || view === 'paper-pdf' ? 'active' : ''}" onclick="navigateTo('home')">&#128218; Exams</a>
     <a href="#" class="nav-tab ${view === 'notes' ? 'active' : ''}" onclick="navigateToNotes('home',null,null,null)">&#128221; Notes</a>
-    <a href="#" class="nav-tab ${view === 'study' || view === 'study-topic' ? 'active' : ''}" onclick="navigateToStudy()">&#128214; Study</a>
+    <a href="#" class="nav-tab ${view === 'study' || view === 'study-topic' ? 'active' : ''}" onclick="navigateToTopics()">&#128218; Topics</a>
   `;
 }
 
